@@ -11,7 +11,7 @@ on:
       - develop
 
 jobs:
-  # Job 1 : Tests
+  # Job 1 : Tests et formatage
   tests:
     runs-on: ubuntu-latest
     steps:
@@ -26,8 +26,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run ESLint - Linting
+      - name: Run ESLint to Check Code Style
         run: npm run lint
+
+      - name: Run Prettier - Format Check
+        run: npm run check-format
 
       - name: Run unit tests
         run: npm run test

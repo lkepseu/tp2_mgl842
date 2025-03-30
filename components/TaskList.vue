@@ -69,8 +69,6 @@ interface Task {
   completed: string;
 }
 
-const baseUrl = "http://localhost:3000"; // Remplacez par votre base URL
-
 const props = defineProps<{ tasks: Task[] }>();
 
 const tasks = ref<Task[]>(props.tasks || []);
@@ -79,7 +77,7 @@ const isEditing = ref<number | null>(null);
 
 // Charger les tâches depuis l'API
 const loadTasks = async () => {
-  const response = await fetch(`${baseUrl}/api/tasks`);
+  const response = await fetch(`/api/tasks`);
   if (response.ok) {
     tasks.value = await response.json() as Task[];
   } else {
@@ -92,7 +90,7 @@ const addTask = async () => {
   if (newTask.value.trim() === '') return;
   const newTaskData = { title: newTask.value.trim(), description: '', completed: 'pending' };
 
-  const response = await fetch('${baseUrl}/api/tasks', {
+  const response = await fetch('/api/tasks', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newTaskData),

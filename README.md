@@ -55,37 +55,42 @@ Voici les technologies et outils utilisés pour ce projet :
 ### Étapes d'installation
 
 1. **Cloner le dépôt** :
-    ```bash
-    git clone https://github.com/username/effitask.git
-    ```
+
+   ```bash
+   git clone https://github.com/username/effitask.git
+   ```
 
 2. **Accéder au répertoire du projet** :
-    ```bash
-    cd effitask
-    ```
+
+   ```bash
+   cd effitask
+   ```
 
 3. **Installer les dépendances pour le backend et le frontend** :
-    ```bash
-    cd backend
-    npm install
-    cd ../frontend
-    npm install
-    ```
+
+   ```bash
+   cd backend
+   npm install
+   cd ../frontend
+   npm install
+   ```
 
 4. **Configurer les variables d'environnement** (dans un fichier `.env`) :
-    - `MONGODB_URI` : URL de votre base de données MongoDB.
-    - `JWT_SECRET` : Clé secrète pour la génération de jetons JWT.
+
+   - `MONGODB_URI` : URL de votre base de données MongoDB.
+   - `JWT_SECRET` : Clé secrète pour la génération de jetons JWT.
 
 5. **Lancer l'application en mode développement** :
-    ```bash
-    # Lancer le backend
-    cd backend
-    npm start
 
-    # Lancer le frontend
-    cd ../frontend
-    npm run dev
-    ```
+   ```bash
+   # Lancer le backend
+   cd backend
+   npm start
+
+   # Lancer le frontend
+   cd ../frontend
+   npm run dev
+   ```
 
 6. **Accéder à l'application** :
    - Le frontend sera accessible sur `http://localhost:3000`.
@@ -98,15 +103,14 @@ Voici les technologies et outils utilisés pour ce projet :
 Le projet est structuré de manière modulaire pour garantir une maintenance facile et une évolutivité. Voici l'architecture de base :
 
 - **Frontend** :
-    - **Pages** : Pages Vue.js pour gérer la logique et la présentation des vues.
-    - **Composants** : Tâches, formulaires, notifications, etc.
-    - **Store (Vuex)** : Gestion de l'état global de l'application.
-    - **Services** : Communication avec l'API backend.
-    
+  - **Pages** : Pages Vue.js pour gérer la logique et la présentation des vues.
+  - **Composants** : Tâches, formulaires, notifications, etc.
+  - **Store (Vuex)** : Gestion de l'état global de l'application.
+  - **Services** : Communication avec l'API backend.
 - **Backend** :
-    - **API** : Endpoints REST pour la gestion des tâches, authentification, etc.
-    - **Modèles** : Schémas Mongoose pour la gestion des données.
-    - **Services** : Logique métier, gestion des notifications et rappels.
+  - **API** : Endpoints REST pour la gestion des tâches, authentification, etc.
+  - **Modèles** : Schémas Mongoose pour la gestion des données.
+  - **Services** : Logique métier, gestion des notifications et rappels.
 
 ---
 

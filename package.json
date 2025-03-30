@@ -12,7 +12,8 @@
     "lint:fix": "eslint --ext .js,.ts,.vue . --fix",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "start": "nuxt start"
+    "start": "nuxt start",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "nuxt": "^3.16.1",

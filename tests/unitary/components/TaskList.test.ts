@@ -7,6 +7,21 @@ import { defineEventHandler, readBody } from 'h3'
 import logger from '../../../utils/logger'
 import taskHandler from '../../../server/api/tasks'; // Importe ton API
 
+vi.stubGlobal('fetch', vi.fn((url, options) => {
+    if (options && options.method === 'POST') {
+        return Promise.resolve({
+            ok: true,
+            json: async () => ({ id: 3, title: 'Task 3', description: 'Description of Task 3', completed: 'pending' }),
+        });
+    }
+    return Promise.resolve({
+        ok: true,
+        json: async () => [
+            { id: 1, title: 'Task 1', description: 'Task description', completed: 'pending' },
+            { id: 2, title: 'Task 2', description: 'Task description', completed: 'pending' },
+        ],
+    });
+}));
 
 describe("TaskList", () => {
     it("GET / should render a list of tasks", () => {

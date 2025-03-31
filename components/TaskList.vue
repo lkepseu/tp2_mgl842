@@ -65,11 +65,12 @@ const isEditing = ref<number | null>(null);
 // Charger les tâches depuis l'API
 const loadTasks = async () => {
   const response = await fetch(`/api/tasks`);
-  if (response.ok) {
-    tasks.value = (await response.json()) as Task[];
-  } else {
-    console.error('Erreur lors de la récupération des tâches');
-  }
+  try {
+  const data = await response.json();
+  tasks.value = data as Task[];
+} catch (error) {
+  console.error('Erreur lors de la récupération des tâches', error);
+}
 };
 
 // Ajouter une tâche
@@ -83,12 +84,12 @@ const addTask = async () => {
     body: JSON.stringify(newTaskData),
   });
 
-  if (response.ok) {
-    const addedTask = (await response.json()) as Task;
-    tasks.value.push(addedTask);
-    newTask.value = '';
-  } else {
-    console.error("Erreur lors de l'ajout de la tâche");
+  try {
+  const data = await response.json();
+  tasks.value.push(data);
+  newTask.value = '';
+} catch (error) {
+  console.error('Erreur lors de l\'ajout de la tâche', error);
   }
 };
 

@@ -1,8 +1,6 @@
 <template>
   <div>
-    <h1 class="text-2xl font-bold mb-4">
-Liste des tâches
-</h1>
+    <h1 class="text-2xl font-bold mb-4">Liste des tâches</h1>
 
     <!-- Formulaire pour ajouter une tâche -->
     <form @submit.prevent="addTask" class="flex gap-2 mb-4">
@@ -12,9 +10,7 @@ Liste des tâches
         required
         class="border p-2 rounded w-full"
       />
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-Ajouter
-</button>
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter</button>
     </form>
 
     <!-- Liste des tâches -->
@@ -27,15 +23,9 @@ Ajouter
         <div class="flex items-center space-x-3">
           <!-- Sélecteur de statut -->
           <select v-model="task.completed" @change="updateTask(task)" class="border p-1 rounded">
-            <option value="pending">
-En attente
-</option>
-            <option value="in progress">
-En cours
-</option>
-            <option value="done">
-Terminée
-</option>
+            <option value="pending">En attente</option>
+            <option value="in progress">En cours</option>
+            <option value="done">Terminée</option>
           </select>
 
           <!-- Champ de texte -->
@@ -48,12 +38,8 @@ Terminée
           />
 
           <!-- Boutons d'action -->
-          <button @click="editTask(task.id)" class="text-yellow-500">
-✏ Modifier
-</button>
-          <button @click="deleteTask(task.id)" class="text-red-500">
-❌ Supprimer
-</button>
+          <button @click="editTask(task.id)" class="text-yellow-500">✏ Modifier</button>
+          <button @click="deleteTask(task.id)" class="text-red-500">❌ Supprimer</button>
         </div>
       </li>
     </ul>
@@ -89,11 +75,7 @@ const loadTasks = async () => {
 // Ajouter une tâche
 const addTask = async () => {
   if (newTask.value.trim() === '') return;
-  const newTaskData = {
-    title: newTask.value.trim(),
-    description: '',
-    completed: 'pending',
-  };
+  const newTaskData = { title: newTask.value.trim(), description: '', completed: 'pending' };
 
   const response = await fetch('/api/tasks', {
     method: 'POST',

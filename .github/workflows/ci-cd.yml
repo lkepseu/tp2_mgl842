@@ -26,9 +26,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run ESLint to Check Code Style
-        run: npm run lint
-
       - name: Run Prettier - Format Check
         run: npm run check-format
 

@@ -1,9 +1,6 @@
 <template>
   <div>
     <!-- Ton layout ici -->
-    <header>
-      <h1>Ma Gestion de Tâches</h1>
-    </header>
     <main>
       <!-- Le contenu des pages s'affichera ici -->
       <NuxtPage />

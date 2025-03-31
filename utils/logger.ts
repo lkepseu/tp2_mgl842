@@ -1,4 +1,5 @@
 import winston from 'winston';
+import fs from 'fs';
 
 // Vérifier si le dossier logs existe, sinon le créer
 const logDir = 'logs';

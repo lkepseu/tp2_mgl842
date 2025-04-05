@@ -14,8 +14,7 @@
     "test:watch": "vitest --watch",
     "start": "nuxt start",
     "deploy": "vercel --prod",
-    "format": "prettier --write .",
-    "check-format": "prettier --check ."
+    "format": "prettier --write ."
   },
   "dependencies": {
     "nuxt": "^3.16.1",

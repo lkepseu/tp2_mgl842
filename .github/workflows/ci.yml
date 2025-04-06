@@ -74,6 +74,9 @@ jobs:
         env:
           NODE_ENV: test
 
+      - name: Ensure @actions/core is installed
+        run: npm install @actions/core
+
       - name: Wait for Vercel Preview Deployment
         id: vercel
         uses: patrickedqvist/wait-for-vercel-preview@v1

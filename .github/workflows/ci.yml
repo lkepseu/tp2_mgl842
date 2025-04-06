@@ -60,6 +60,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
@@ -71,8 +74,19 @@ jobs:
         env:
           NODE_ENV: test
 
-      - name: Run Playwright tests
-        run: npm run test:e2e
+      - name: Wait for Vercel Preview Deployment
+        id: vercel
+        uses: patrickedqvist/wait-for-vercel-preview@v1
+        with:
+          token: ${{ secrets.VERCEL_TOKEN }}
+          max_timeout: 180
+
+      - name: Run Playwright tests on preview deployment
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.vercel.outputs.url }}
+        run: |
+          npx playwright install
+          npx playwright test
 
   sonarqube:
     name: 🔎 SonarQube Analysis

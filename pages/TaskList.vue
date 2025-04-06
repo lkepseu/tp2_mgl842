@@ -161,15 +161,16 @@ select {
   font-family: 'Times New Roman', serif;
 }
 
+
 article {
   padding: 1rem;
-  border: 1px solid var(--pico-muted-border-color);
+  border: 1px solid #dcdcdc;
   border-radius: 0.5rem;
-  background: var(--pico-background-color);
+  background: #f5f5f5;
   transition: all 0.2s ease;
 }
 
 article:hover {
-  background: var(--pico-muted-color);
+  background: var(#e0e0e0);
 }
 </style>

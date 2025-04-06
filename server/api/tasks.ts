@@ -1,69 +1,79 @@
-import { defineEventHandler, getQuery, readBody, createError } from 'h3';
-import logger from '../../utils/logger';
+// server/tasks.ts
+import { defineEventHandler, readBody, getQuery } from 'h3';
 
 let tasks = [
   {
     id: 1,
-    title: 'Première tâche',
-    description: 'Description de la première tâche',
-    completed: 'pending',
+    title: 'Tâche 1',
+    description: 'Description de la tâche 1',
+    status: 'pending',
+    date: '2025-04-06',
+    time: '10:00',
+    completed: false,
+  },
+  {
+    id: 2,
+    title: 'Tâche 2',
+    description: 'Description de la tâche 2',
+    status: 'pending',
+    date: '2025-04-06',
+    time: '11:00',
+    completed: false,
+  },
+  {
+    id: 3,
+    title: 'Tâche 3',
+    description: 'Description de la tâche 3',
+    status: 'pending',
+    date: '2025-04-06',
+    time: '12:00',
+    completed: false,
   },
 ];
 
+// API pour récupérer toutes les tâches
 export default defineEventHandler(async (event) => {
   const method = event.node.req.method;
-  console.log('method', method);
+  const query = getQuery(event);
 
-  try {
-    if (method === 'GET') {
-      logger.info('📢 Récupération des tâches');
-      return tasks;
-    }
-
-    if (method === 'POST') {
-      console.log('event', event);
-      const body = (event.node.req as any).body || (await readBody(event));
-      logger.info(`📢 Création d'une nouvelle tâche : ${body.title}`);
-
-      if (!body.title) {
-        logger.error('⛔ Erreur : Titre requis');
-        throw createError({ statusCode: 400, statusMessage: 'Titre requis' });
-      }
-
-      const newTask = { id: tasks.length + 1, ...body };
-      tasks.push(newTask);
-      logger.info(`✅ Nouvelle tâche ajoutée : ${newTask.title}`);
-      console.log('newTask', newTask);
-      return newTask;
-    }
-
-    if (method === 'PUT') {
-      const body = (event.node.req as any).body || (await readBody(event));
-      if (!body.title) {
-        logger.error('⛔ Erreur : Titre requis');
-        throw createError({ statusCode: 400, statusMessage: 'Titre requis' });
-      }
-
-      const index = tasks.findIndex((task) => task.id === body.id);
-      if (index !== -1) tasks[index] = body;
-      return tasks[index];
-    }
-
-    if (method === 'DELETE') {
-      const { id } = (event.node.req as any).query || getQuery(event);
-
-      if (!id) {
-        logger.error('⛔ Erreur : ID requis');
-        throw createError({ statusCode: 400, statusMessage: 'ID requis' });
-      }
-      tasks = tasks.filter((task) => task.id !== Number(id));
-      return { message: 'Task deleted' };
-    }
-  } catch (error: any) {
-    logger.error(`⛔ Erreur 1: ${error.message}`);
-    return {
-      statusCode: error.statusCode || 500,
-      message: error.statusMessage || 'Erreur serveur',
-    };
+  if (method === 'GET') {
+    return tasks; // Retourner toutes les tâches
   }
+
+  if (method === 'POST') {
+    // Ajouter une nouvelle tâche
+    const body = await readBody(event);
+    const newTask = {
+      id: tasks.length + 1,
+      title: body.title,
+      description: body.description || '',
+      status: 'pending',
+      date: body.date,
+      time: body.time,
+      completed: false,
+    };
+    tasks.unshift(newTask);
+    return newTask;
+  }
+
+  if (method === 'DELETE') {
+    // Supprimer une tâche par ID
+    const taskId = Number(query.id);
+    tasks = tasks.filter((task) => task.id !== taskId);
+    return { message: `Tâche ${taskId} supprimée` };
+  }
+
+  if (method === 'PUT') {
+    // Mettre à jour une tâche
+    const body = await readBody(event);
+    const taskIndex = tasks.findIndex((task) => task.id === body.id);
+
+    if (taskIndex !== -1) {
+      tasks[taskIndex] = { ...tasks[taskIndex], ...body };
+      return tasks[taskIndex];
+    }
+    return { error: 'Tâche non trouvée' };
+  }
+
+  return { error: 'Méthode non supportée' };
 });

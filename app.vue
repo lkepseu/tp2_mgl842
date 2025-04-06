@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <!-- Ton layout ici -->
-    <main>
-      <!-- Le contenu des pages s'affichera ici -->
+
+    <NuxtLayout>
       <NuxtPage />
-    </main>
-  </div>
+    </NuxtLayout>
+
 </template>
 
-<script setup>
-// Aucun script spécifique ici
-</script>
-
 <style scoped>
-/* Ton style global ici */
+main {
+
+  font-family: 'Inter', sans-serif;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  min-height: 100vh;
+}
 </style>

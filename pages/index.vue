@@ -1,11 +1,9 @@
 <template>
   <main>
-    <img
-      src="/effitask_logo.png"
-      alt="EffiTask Logo"
-      width="200"
-      class="logo"
-    />
+    <img src="/effitask_logo.png"
+alt="EffiTask Logo"
+width="200"
+class="logo" />
     <h1>Your Task Manager</h1>
     <p>Welcome to EffiTask! A simple tool to manage your daily tasks efficiently.</p>
     <p>
@@ -19,7 +17,11 @@
 </script>
 
 <style scoped>
-template, html, body, #__nuxt, main {
+template,
+html,
+body,
+#__nuxt,
+main {
   height: 100%;
   text-align: center;
   padding: 2rem;

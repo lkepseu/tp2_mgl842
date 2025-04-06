@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <main>
       <!-- Le contenu des pages s'affichera ici -->
       <NuxtPage />

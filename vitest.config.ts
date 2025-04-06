@@ -10,6 +10,6 @@ export default defineConfig({
   },
   coverage: {
     reporter: ['text', 'lcov'], // 'lcov' requis pour Coveralls
-    exclude: ['node_modules/', 'dist/', '.output/']
+    exclude: ['node_modules/', 'dist/', '.output/'],
   },
 });

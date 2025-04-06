@@ -12,6 +12,9 @@
     "lint:fix": "eslint --ext .js,.ts,.vue . --fix",
     "test": "vitest",
     "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
+    "coveralls": "vitest run --coverage && cat ./coverage/lcov.info | coveralls",
+    "test:e2e": "playwright test",
     "test_nyc": "nyc --reporter=lcov --reporter=text mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "nuxt start",
@@ -25,6 +28,7 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "@types/jsdom": "^21.1.7",
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
@@ -37,6 +41,7 @@
     "eslint-plugin-vue": "^10.0.0",
     "jsdom": "^26.0.0",
     "nyc": "^17.1.0",
+    "playwright": "^1.51.1",
     "prettier": "^3.5.3",
     "supertest": "^7.1.0",
     "typescript": "^5.8.2",

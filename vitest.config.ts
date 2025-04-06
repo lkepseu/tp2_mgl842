@@ -8,4 +8,8 @@ export default defineConfig({
     environment: 'jsdom', // Pour tester les composants Vue
     include: ['tests/**/*.test.{ts,js,vue}'], // Inclut les tests dans tests/
   },
+  coverage: {
+    reporter: ['text', 'lcov'], // 'lcov' requis pour Coveralls
+    exclude: ['node_modules/', 'dist/', '.output/']
+  },
 });

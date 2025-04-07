@@ -36,8 +36,7 @@ Provide a detailed description of what the PR does and why it's necessary.
 
 ---
 
-### 🏷️ Labels  
-- **Priority:** Medium  
+### 🏷️ Labels   
 - **Type:** Feature / Bugfix / Refactor / Documentation  
 - **Status:** Ready for Review / Work in Progress
 

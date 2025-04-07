@@ -36,10 +36,4 @@ _Example: Users should be able to create an account using their email, password,
 ### 🖼️ Screenshot / Mockup / Link  
 _Paste here a screenshot or a link to a design/mockup (e.g. Figma, Loom, etc.)_
 
----
 
-### 🏷️ Meta  
-- **Priority:** Medium  
-- **Type:** Feature  
-- **Status:** To Do  
-- **Module:** Auth  

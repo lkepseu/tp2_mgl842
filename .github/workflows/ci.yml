@@ -81,8 +81,7 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.vercel.outputs.url }}
         run: |
-          npx playwright install
-          npx playwright test
+          npx playwright test tests/e2e
 
   sonarqube:
     name: 🔎 SonarQube Analysis

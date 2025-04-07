@@ -1,172 +1,122 @@
-// tests/test.ts
-import { describe, expect, test, vi } from 'vitest';
-import { defineEventHandler, readBody } from 'h3';
-import logger from '../../../utils/logger';
-import taskHandler from '../../../server/api/tasks'; // Importe ton API
+// tests/unit/api/server-tasks.test.ts
+import { describe, it, expect, beforeEach } from 'vitest';
+import handler from '../../../server/api/tasks';
 
-vi.stubGlobal(
-  'fetch',
-  vi.fn((url, options) => {
-    if (options && options.method === 'GET') {
-      return Promise.resolve({
-        ok: true,
-        json: async () => [
-          {
-            id: 1,
-            title: 'Première tâche',
-            description: 'Description de la première tâche',
-            completed: 'pending',
-          },
-        ],
-      });
-    }
-    if (options && options.method === 'POST') {
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          id: 3,
-          title: 'Task 3',
-          description: 'Description of Task 3',
-          completed: 'pending',
-        }),
-      });
-    }
-    if (options && options.method === 'PUT') {
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          id: 1,
-          title: 'Tâche modifiée',
-          description: 'Mise à jour',
-          completed: 'done',
-        }),
-      });
-    }
-    if (options && options.method === 'DELETE') {
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({ message: 'Task deleted' }),
-      });
-    }
-    return Promise.resolve({
-      ok: true,
-      json: async () => [
-        {
-          id: 1,
-          title: 'Task 1',
-          description: 'Task description',
-          completed: 'pending',
-        },
-      ],
-    });
-  }),
-);
+let mockEvent: any;
 
-let tasks = [
-  {
-    id: 1,
-    title: 'Première tâche',
-    description: 'Description de la première tâche',
-    completed: 'pending',
+const createEvent = (method: string, body = {}, query = {}) => ({
+  node: {
+    req: {
+      method,
+      headers: {
+        'content-type': 'application/json',
+      },
+    },
   },
-];
+  context: {},
+  body,
+  query,
+});
 
-describe('Unitary Tests', () => {
-  // Create some unit tests here
-  test('GET / Should get the list of tasks', async () => {
-    const event = {
-      node: {
-        req: { method: 'GET' },
-      },
-    } as any;
-    const result = await fetch('/api/tasks', { method: 'GET' });
-    const data = await result.json();
-    console.log('result : ', data);
-    expect(data).toStrictEqual(tasks);
+// Simule la fonction readBody
+vi.mock('h3', async () => {
+  const actual = await vi.importActual('h3');
+  return {
+    ...actual,
+    readBody: (event) => Promise.resolve(event.body),
+    getQuery: (event) => event.query,
+  };
+});
+
+describe('API Handler - /api/tasks', () => {
+  beforeEach(() => {
+    // Reset base des tâches pour chaque test
+    mockEvent = null;
   });
 
-  test('POST / Should add a new task', async () => {
-    const event = {
-      node: {
-        req: {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: {
-            title: 'Nouvelle tâche',
-            description: 'Test',
-            completed: 'pending',
-          } as any,
-        },
-      },
-    } as any;
-    const result = await fetch('/api/tasks', {
-      method: 'POST',
-      body: JSON.stringify({
-        title: 'Task 3',
-        description: 'Description of Task 3',
-        completed: 'pending',
+  it('GET - should return all tasks', async () => {
+    mockEvent = createEvent('GET');
+    const result = await handler(mockEvent);
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBeGreaterThan(0);
+  });
+
+  it('POST - should add a new task', async () => {
+    const body = {
+      title: 'Nouvelle tâche test',
+      description: 'Test desc',
+      date: '2025-04-07',
+      time: '09:00',
+    };
+    mockEvent = createEvent('POST', body);
+
+    const result = await handler(mockEvent as any);
+    expect(result).toHaveProperty('id');
+    expect(result.title).toBe(body.title);
+    expect(result.status).toBe('pending');
+    expect(result.completed).toBe(false);
+  });
+
+  it('DELETE - should remove a task by ID', async () => {
+    // D'abord, ajoutons une tâche pour s'assurer que l'ID existe
+    const addEvent = createEvent('POST', {
+      title: 'Tâche à supprimer',
+      date: '2025-04-06',
+      time: '15:00',
+    });
+    const added = await handler(addEvent);
+
+    // Ensuite on la supprime
+    const deleteEvent = {
+      node: { req: { method: 'DELETE' } },
+      context: {},
+      query: { id: String(added.id) },
+    };
+
+    const result = await handler(deleteEvent);
+    expect(result).toHaveProperty('message');
+    expect(result.message).toContain(`Tâche ${added.id} supprimée`);
+  });
+
+  it('PUT - should update a task', async () => {
+    // Ajouter une tâche à mettre à jour
+    const added = await handler(
+      createEvent('POST', {
+        title: 'Tâche à mettre à jour',
+        description: '',
+        date: '2025-04-06',
+        time: '15:30',
       }),
-    });
-    const data = await result.json();
-    console.log('result : ', data);
-    expect(data).toStrictEqual({
-      id: 3,
-      title: 'Task 3',
-      description: 'Description of Task 3',
-      completed: 'pending',
-    });
+    );
+
+    const updatedFields = {
+      id: added.id,
+      title: 'Tâche mise à jour',
+      completed: true,
+    };
+
+    const updateEvent = createEvent('PUT', updatedFields);
+
+    const result = await handler(updateEvent);
+    expect(result.title).toBe('Tâche mise à jour');
+    expect(result.completed).toBe(true);
   });
 
-  test('PUT / Should update an existing task', async () => {
-    const event = {
-      node: {
-        req: {
-          method: 'PUT',
-          headers: { 'content-type': 'application/json' },
-          body: {
-            id: 1,
-            title: 'Tâche modifiée',
-            description: 'Mise à jour',
-            completed: 'done',
-          } as any,
-        },
-      },
-    } as any;
-    const result = await fetch('/api/tasks', {
-      method: 'PUT',
-      body: JSON.stringify({
-        id: 1,
-        title: 'Tâche modifiée',
-        description: 'Mise à jour',
-        completed: 'done',
-      }),
+  it('PUT - should return error if task not found', async () => {
+    const updateEvent = createEvent('PUT', {
+      id: 9999,
+      title: 'Does not exist',
     });
-    const data = await result.json();
-    console.log('result : ', data);
-    expect(data).toStrictEqual({
-      id: 1,
-      title: 'Tâche modifiée',
-      description: 'Mise à jour',
-      completed: 'done',
-    });
+
+    const result = await handler(updateEvent);
+    expect(result).toHaveProperty('error');
+    expect(result.error).toBe('Tâche non trouvée');
   });
 
-  test('DELETE / Should delete a task', async () => {
-    const event = {
-      node: {
-        req: {
-          method: 'DELETE',
-          query: { id: 1 } as any,
-        },
-      },
-    } as any;
-
-    const result = await fetch('/api/tasks', {
-      method: 'DELETE',
-      body: JSON.stringify({ id: 1 }),
-    });
-    const data = await result.json();
-    console.log('result : ', data);
-    expect(data).toStrictEqual({ message: 'Task deleted' });
+  it('Unknown method - should return error', async () => {
+    const unknownEvent = createEvent('PATCH');
+    const result = await handler(unknownEvent);
+    expect(result).toHaveProperty('error');
+    expect(result.error).toBe('Méthode non supportée');
   });
 });

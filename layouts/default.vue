@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- Ton layout ici -->
-    <header>
-      <h1>Ma Gestion de Tâches</h1>
-    </header>
     <main>
       <!-- Le contenu des pages s'affichera ici -->
       <NuxtPage />
@@ -17,4 +13,16 @@
 
 <style scoped>
 /* Ton style global ici */
+main {
+  text-align: center;
+  padding: 2rem;
+  background-color: #000000;
+  color: #f5f5f5;
+  font-family: 'Times New Roman', serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 </style>

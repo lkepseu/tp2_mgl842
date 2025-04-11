@@ -1,3 +1,4 @@
+
 import { defineNuxtConfig } from 'nuxt/config';
 import PrimeVue from 'primevue/config';
 import InputText from 'primevue/inputtext';
@@ -22,6 +23,9 @@ export default defineNuxtConfig({
         },
       ],
     },
+  },
+  nitro: {
+    preset: 'vercel'
   },
 
   compatibilityDate: '2025-04-06',

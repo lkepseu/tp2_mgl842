@@ -1,5 +1,5 @@
-// server/tasks.ts
 import { defineEventHandler, readBody, getQuery } from 'h3';
+import logger from '~/utils/logger';
 
 let tasks = [
   {
@@ -31,49 +31,83 @@ let tasks = [
   },
 ];
 
-// API pour récupérer toutes les tâches
 export default defineEventHandler(async (event) => {
   const method = event.node.req.method;
   const query = getQuery(event);
 
+  logger.info(`[API][TASKS] Requête ${method} reçue`);
+
   if (method === 'GET') {
-    return tasks; // Retourner toutes les tâches
+    try {
+      logger.info(`[TASKS][GET] Récupération de ${tasks.length} tâche(s)`);
+      return tasks;
+    } catch (err) {
+      logger.error(`[TASKS][GET] Erreur : ${err}`);
+      return { error: 'Erreur lors de la récupération des tâches' };
+    }
   }
 
   if (method === 'POST') {
-    // Ajouter une nouvelle tâche
-    const body = await readBody(event);
-    const newTask = {
-      id: tasks.length + 1,
-      title: body.title,
-      description: body.description || '',
-      status: 'pending',
-      date: body.date,
-      time: body.time,
-      completed: false,
-    };
-    tasks.unshift(newTask);
-    return newTask;
+    try {
+      const body = await readBody(event);
+      const newTask = {
+        id: tasks.length + 1,
+        title: body.title,
+        description: body.description || '',
+        status: 'pending',
+        date: body.date,
+        time: body.time,
+        completed: false,
+      };
+      tasks.unshift(newTask);
+      logger.info(`[TASKS][POST] Tâche ajoutée : ${newTask.title} (ID: ${newTask.id})`);
+      return newTask;
+    } catch (err) {
+      logger.error(`[TASKS][POST] Erreur lors de l'ajout : ${err}`);
+      return { error: 'Erreur lors de la création de la tâche' };
+    }
   }
 
   if (method === 'DELETE') {
-    // Supprimer une tâche par ID
-    const taskId = Number(query.id);
-    tasks = tasks.filter((task) => task.id !== taskId);
-    return { message: `Tâche ${taskId} supprimée` };
+    try {
+      const taskId = Number(query.id);
+      const initialLength = tasks.length;
+      tasks = tasks.filter((task) => task.id !== taskId);
+      const deleted = initialLength !== tasks.length;
+
+      if (deleted) {
+        logger.warn(`[TASKS][DELETE] Tâche supprimée : ID ${taskId}`);
+        return { message: `Tâche ${taskId} supprimée` };
+      } else {
+        logger.error(`[TASKS][DELETE] Tâche introuvable : ID ${taskId}`);
+        return { error: `Tâche ${taskId} introuvable` };
+      }
+    } catch (err) {
+      logger.error(`[TASKS][DELETE] Erreur : ${err}`);
+      return { error: 'Erreur lors de la suppression de la tâche' };
+    }
   }
 
   if (method === 'PUT') {
-    // Mettre à jour une tâche
-    const body = await readBody(event);
-    const taskIndex = tasks.findIndex((task) => task.id === body.id);
+    try {
+      const body = await readBody(event);
+      const taskIndex = tasks.findIndex((task) => task.id === body.id);
 
-    if (taskIndex !== -1) {
-      tasks[taskIndex] = { ...tasks[taskIndex], ...body };
-      return tasks[taskIndex];
+      if (taskIndex !== -1) {
+        const updatedTask = { ...tasks[taskIndex], ...body };
+        tasks[taskIndex] = updatedTask;
+        logger.info(`[TASKS][PUT] Tâche mise à jour : ID ${body.id}`);
+        return updatedTask;
+      } else {
+        logger.error(`[TASKS][PUT] Tâche non trouvée : ID ${body.id}`);
+        return { error: 'Tâche non trouvée' };
+      }
+    } catch (err) {
+      logger.error(`[TASKS][PUT] Erreur : ${err}`);
+      return { error: 'Erreur lors de la mise à jour de la tâche' };
     }
-    return { error: 'Tâche non trouvée' };
   }
 
+  logger.warn(`[API][TASKS] Méthode HTTP non supportée : ${method}`);
   return { error: 'Méthode non supportée' };
 });

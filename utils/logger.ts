@@ -11,8 +11,8 @@ const logger = createLogger({
   ),
   transports: [
     new transports.Console(), // Output to stdout/stderr → visible in Vercel Logs
-    new transports.File({ filename: 'logs/error.log', level: 'error' }), // capture the error logs
-    new transports.File({ filename: 'logs/combined.log' }) // capture all logs
+    // new transports.File({ filename: '/tmp/logs/error.log', level: 'error' }), // capture the error logs
+    // new transports.File({ filename: '/tmp/logs/combined.log' }) // capture all logs
   ],
   exitOnError: false
 });

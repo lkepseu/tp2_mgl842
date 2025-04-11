@@ -3,12 +3,14 @@
     <main>
       <!-- Le contenu des pages s'affichera ici -->
       <NuxtPage />
+      <Analytics />
     </main>
   </div>
 </template>
 
 <script setup>
 // Aucun script spécifique ici
+import { Analytics } from '@vercel/analytics/dist/vue/index.js';
 </script>
 
 <style scoped>

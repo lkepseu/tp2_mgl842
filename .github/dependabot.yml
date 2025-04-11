@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # 📦 Update NPM dependencies in the root project
+  - package-ecosystem: "npm"
+    directory: "/"  # location of package.json and package-lock.json
+    schedule:
+      interval: "weekly"  # options: "daily", "weekly", or "monthly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+
+  # 🔧 Update GitHub Actions (e.g., actions/checkout, setup-node, etc.)
+  - package-ecosystem: "github-actions"
+    directory: "/"  # workflows are located in .github/workflows/
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(actions)"

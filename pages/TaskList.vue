@@ -161,7 +161,6 @@ select {
   font-family: 'Times New Roman', serif;
 }
 
-
 article {
   padding: 1rem;
   border: 1px solid #dcdcdc;

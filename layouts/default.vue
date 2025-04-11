@@ -10,7 +10,7 @@
 
 <script setup>
 // Aucun script spécifique ici
-import { Analytics } from '@vercel/analytics/dist/vue/index.js';
+import { Analytics } from '@vercel/analytics/vue';
 </script>
 
 <style scoped>

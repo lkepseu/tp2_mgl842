@@ -1,5 +1,5 @@
 import { defineEventHandler, readBody, getQuery } from 'h3';
-import logger from '~/utils/logger';
+import logger from '../../utils/logger';
 
 let tasks = [
   {

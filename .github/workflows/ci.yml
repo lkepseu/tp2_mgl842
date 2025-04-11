@@ -76,15 +76,13 @@ jobs:
         run: |
           npm run preview &
           sleep 5
-        env:
-          NODE_ENV: test
 
       - name: Ensure @actions/core is installed
         run: npm install @actions/core
 
       - name: Run Playwright tests on preview deployment
         env:
-          PLAYWRIGHT_BASE_URL: ${{ steps.vercel.outputs.url }}
+          PLAYWRIGHT_BASE_URL: http://localhost:3000
         run: |
           npx playwright test tests/e2e
 

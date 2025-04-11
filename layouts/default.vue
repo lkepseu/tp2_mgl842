@@ -3,14 +3,17 @@
     <main>
       <!-- Le contenu des pages s'affichera ici -->
       <NuxtPage />
-      <Analytics />
+
     </main>
   </div>
+  <Analytics />
+  <SpeedInsights />
 </template>
 
 <script setup>
 // Aucun script spécifique ici
 import { Analytics } from '@vercel/analytics/vue';
+import { SpeedInsights } from '@vercel/speed-insights/vue';
 </script>
 
 <style scoped>

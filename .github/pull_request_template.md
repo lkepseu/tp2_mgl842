@@ -1,15 +1,15 @@
 ## 📌 Description
-Explique brièvement les changements apportés.
+Briefly explains the changes made.
 
 ## ✅ Checklist
-- [ ] Code conforme à ESLint
-- [ ] Ajout ou mise à jour des tests unitaires
-- [ ] Tests passés avec succès (Vitest, Playwright)
-- [ ] Aucune régression détectée
-- [ ] Documentation mise à jour si nécessaire
+- [ ] ESLint-compliant code
+- [ ] Unit tests added or updated
+- [ ] Tests passed successfully (Vitest, Playwright)
+- [ ] No regression detected
+- [ ] Documentation updated if necessary
 
-## 🔍 Lié à une issue ?
+## 🔍 To which issue this PR is linked to ?
 Closes #...
 
-## 💬 Commentaires
-Ajoute ici toute information utile pour le reviewer.
+## 💬 Comments
+Add here any useful information for the reviewer.

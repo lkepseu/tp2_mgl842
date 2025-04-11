@@ -13,13 +13,14 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
-    "coveralls": "vitest run --coverage && cat ./coverage/lcov.info | coveralls",
+    "coveralls": "cat coverage/lcov.info | coveralls",
     "test:e2e": "npx playwright test tests/e2e",
     "start": "nuxt start",
     "deploy": "vercel --prod",
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@vercel/analytics": "^1.5.0",
     "nuxt": "^3.16.1",
     "primeicons": "^7.0.0",
     "primevue": "^4.3.3",

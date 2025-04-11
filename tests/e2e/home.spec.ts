@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Home Page', () => {
   test('should render correctly and navigate to dashboard', async ({ page }) => {
     // Va à la page d'accueil
-    await page.goto('/');
+    await page.goto(process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000')
 
     // Screenshot global de la page d'accueil
     await page.screenshot({ path: 'tests/e2e/screenshots/homepage.png', fullPage: true });
